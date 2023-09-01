@@ -19,17 +19,22 @@ const handleContainer = async () => {
     // console.log(div);
   });
 };
+
 const handleCard = async (itemId) => {
+  const cardContainer = document.getElementById("card-container");
+  cardContainer.innerHTML = "";
+  const noData = document.getElementById("no-data");
+  noData.innerHTML = "";
+
   const res = await fetch(`
     https://openapi.programming-hero.com/api/videos/category/${itemId}
 
     `);
   const data = await res.json();
 
-  const cardContainer = document.getElementById("card-container");
-  cardContainer.innerHTML = "";
   if (data.status == true) {
     data.data.forEach((item) => {
+      show(item?.others?.posted_date);
       const div = document.createElement("div");
       //   console.log(item.authors);
 
@@ -40,6 +45,7 @@ const handleCard = async (itemId) => {
           src="${item?.thumbnail}"
         />
       </figure>
+       
       <div class="card-body">
         <div class="card-footer flex justify-between mt-8">
             <div class="flex  justify-center text-center items-center gap-2">
@@ -73,15 +79,23 @@ const handleCard = async (itemId) => {
                </div>
       </div>
     </div>
-   
+    
  
           `;
 
       cardContainer.appendChild(div);
     });
+  } else {
+    fun(data.status);
   }
-  if (data.status == false) {
+
+  //   console.log(data.data);
+};
+
+const fun = (data) => {
+  if (data == false) {
     const noData = document.getElementById("no-data");
+    noData.innerHTML = "";
     const div = document.createElement("div");
     div.innerHTML = `
     <div class=" w-40 ">
@@ -91,9 +105,17 @@ const handleCard = async (itemId) => {
   `;
     noData.appendChild(div);
   }
-
-  //   console.log(data.data);
 };
 // handleCard();
-
+const show = (seconds) => {
+  const timeShow = document.getElementById("time-show");
+  parseInt.seconds;
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+  const div = document.createElement("div");
+  div.innerHTML = `  ${hours}hrs ${minutes}min ${remainingSeconds}sec`;
+};
+handleCard("1000")
+// console.log(show());
 handleContainer();
